@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Speech Trainer</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Speech Trainer</h1>
+
+    <div class="section">
+      <h2>Opening</h2>
+      <button onclick="showAlertOpening()">Opening</button>
+    </div>
+
+    <div class="section">
+      <h2>Introduction</h2>
+      <button onclick="showAlertIntro()">Fellow Toastmasters and guests... So what happened in February of 2012?</button>
+    </div>
+
+    <div class="section">
+      <h2>Body of Speech</h2>
+      <button onclick="showAlertStage()">What I discovered</button>
+      <button onclick="showAlertEye()">Why you should stay.</button>
+      <button onclick="showAlertGestures()">???</button>
+    </div>
+
+    <div class="section">
+      <h2>Close</h2>
+      <button onclick="showAlertClose()">Your future self is watching</button>
+    </div>
+  </div>
+
+  <!-- Custom Alert Modal -->
+  <div id="customAlert" class="custom-alert hidden">
+    <div class="custom-alert-content">
+      <p id="customAlertMessage">Alert text</p>
+      <button onclick="nextAlertMessage()">Next</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
