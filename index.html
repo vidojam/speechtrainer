@@ -10,6 +10,19 @@
   <div class="container">
     <h1>Speech Trainer</h1>
 
+    <!-- Voice Settings -->
+    <div class="section">
+      <h2>Voice Settings</h2>
+      <label for="voiceSelect">Choose Voice:</label>
+      <select id="voiceSelect"></select>
+    </div>
+
+    <!-- Progress Bar -->
+    <div id="progressBarContainer" style="display: none;">
+      <div id="progressBar"></div>
+    </div>
+
+    <!-- Speech Sections -->
     <div class="section">
       <h2>Opening</h2>
       <button onclick="showAlertOpening()">Opening</button>
@@ -23,7 +36,7 @@
     <div class="section">
       <h2>Body of Speech</h2>
       <button onclick="showAlertStage()">What I discovered</button>
-      <button onclick="showAlertEye()">Why you should stay.</button>
+      <button onclick="showAlertEye()">Why you should stay</button>
       <button onclick="showAlertGestures()">???</button>
     </div>
 
@@ -33,25 +46,22 @@
     </div>
   </div>
 
-  <!-- Custom Alert Modal -->
+  <!-- Custom Alert Modal (ONLY ONE) -->
   <div id="customAlert" class="custom-alert hidden">
     <div class="custom-alert-content">
-      <p id="customAlertMessage">Alert text</p>
-      <button onclick="nextAlertMessage()">Next</button>
-    </div>
+      <p id="customAlertMessage"></p>
+<div class="custom-alert-controls">
+  <button onclick="replayAlert()">🔁 Replay</button>
+
+  <div class="vertical-controls">
+    <button onclick="toggleMute()" id="muteButton">🔇 Mute</button>
+    <button onclick="exitAlert()">❌ Exit</button> <!-- Exit below Mute -->
   </div>
 
-  <div id="customAlert" class="custom-alert hidden">
-  <div class="custom-alert-content">
-    <p id="customAlertMessage"></p>
-    <div class="custom-alert-controls">
-      <button onclick="replayAlert()">🔁 Replay</button>
-      <button onclick="toggleMute()" id="muteButton">🔇 Mute</button>
-      <button onclick="nextAlertMessage()">Next</button>
-    </div>
-  </div>
+  <button onclick="nextAlertMessage()">Next</button>
 </div>
-
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
