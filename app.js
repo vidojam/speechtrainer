@@ -1,23 +1,38 @@
 let currentMessages = [];
 let currentIndex = 0;
+let synth = window.speechSynthesis;
+
+function speak(text) {
+  if (synth.speaking) synth.cancel(); // Stop previous speech
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1; // Normal speed
+  utterance.pitch = 1; // Normal pitch
+  utterance.lang = 'en-US'; // Adjust as needed
+  synth.speak(utterance);
+}
 
 function showCustomAlert(messages) {
   currentMessages = messages;
   currentIndex = 0;
-  document.getElementById('customAlertMessage').textContent = currentMessages[currentIndex];
+  const firstMessage = currentMessages[currentIndex];
+  document.getElementById('customAlertMessage').textContent = firstMessage;
   document.getElementById('customAlert').classList.remove('hidden');
+  speak(firstMessage);
 }
 
 function nextAlertMessage() {
   currentIndex++;
   if (currentIndex < currentMessages.length) {
-    document.getElementById('customAlertMessage').textContent = currentMessages[currentIndex];
+    const message = currentMessages[currentIndex];
+    document.getElementById('customAlertMessage').textContent = message;
+    speak(message);
   } else {
     document.getElementById('customAlert').classList.add('hidden');
+    synth.cancel(); // Stop speaking when done
   }
 }
 
-// Replace old alert() calls with these:
+// Reuse your message functions from before
 function showAlertOpening() {
   showCustomAlert([
     "It was 2010 when I stumbled into a Toastmaster Meeting",

@@ -41,6 +41,18 @@
     </div>
   </div>
 
+  <div id="customAlert" class="custom-alert hidden">
+  <div class="custom-alert-content">
+    <p id="customAlertMessage"></p>
+    <div class="custom-alert-controls">
+      <button onclick="replayAlert()">🔁 Replay</button>
+      <button onclick="toggleMute()" id="muteButton">🔇 Mute</button>
+      <button onclick="nextAlertMessage()">Next</button>
+    </div>
+  </div>
+</div>
+
+
   <script src="app.js"></script>
 </body>
 </html>
