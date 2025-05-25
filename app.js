@@ -9,9 +9,10 @@ let selectedVoice = null;
 function loadVoices() {
   voices = synth.getVoices();
   const voiceSelect = document.getElementById('voiceSelect');
-  if (!voiceSelect) return;
 
+  if (!voiceSelect) return; // Safety check if element doesn't exist
   voiceSelect.innerHTML = '';
+
   voices.forEach((voice, index) => {
     const option = document.createElement('option');
     option.value = index;
@@ -30,7 +31,15 @@ document.getElementById('voiceSelect')?.addEventListener('change', (e) => {
   selectedVoice = voices[e.target.value];
 });
 
-let isMuted = false;
+
+let isMuted = false; // Track mute state
+
+function replayAlert() {
+  if (currentMessages.length === 0 || currentIndex >= currentMessages.length) return;
+  const message = currentMessages[currentIndex];
+  document.getElementById('customAlertMessage').textContent = message;
+  speak(message);
+}
 
 function toggleMute() {
   isMuted = !isMuted;
@@ -38,16 +47,17 @@ function toggleMute() {
   muteButton.textContent = isMuted ? '🔈 Unmute' : '🔇 Mute';
 
   if (isMuted) {
-    speechSynthesis.cancel();
+    speechSynthesis.cancel(); // Stop speaking immediately
   } else {
-    replayAlert();
+    replayAlert(); // Replay current message on unmute
   }
 }
 
+// Update the mute button text on load
+// speak() to respect mute
 function speak(text) {
   if (isMuted) return;
-  if (synth.speaking) synth.cancel();
-
+  if (synth.speaking) synth.cancel(); // Stop previous speech
   const utterance = new SpeechSynthesisUtterance(text);
   if (selectedVoice) utterance.voice = selectedVoice;
   utterance.rate = 1;
@@ -56,28 +66,8 @@ function speak(text) {
   synth.speak(utterance);
 }
 
-function replayAlert() {
-  if (currentMessages.length === 0 || currentIndex === 0) return;
 
-  const inputField = document.getElementById('userPrediction');
-  const alertBox = document.getElementById('customAlert');
-  const nextBtn = alertBox.querySelector("button[onclick='nextAlertMessage()']");
-
-  inputField.value = '';
-  inputField.style.display = 'block';
-  inputField.focus();
-
-  if (nextBtn) {
-    nextBtn.textContent = "Submit Guess";
-    nextBtn.onclick = nextAlertMessage;
-  }
-
-  const messageBox = document.getElementById('customAlertMessage');
-  messageBox.textContent = '';
-
-  currentIndex--; // Step back one
-}
-
+// Show custom alert and start speech
 function showCustomAlert(messages) {
   currentMessages = messages;
   currentIndex = 0;
@@ -90,7 +80,7 @@ function showCustomAlert(messages) {
 
   alertBox.classList.remove('hidden');
   progress.style.display = 'block';
-  nextAlertMessage();
+  nextAlertMessage(); // Start first message
 }
 
 function nextAlertMessage() {
@@ -113,34 +103,31 @@ function nextAlertMessage() {
   inputField.style.display = 'block';
   inputField.focus();
 
-  // Step 2: Replace Next button with Confirm Prediction until they press enter
+  // Step 2: Replace Next button with Confirm Prediction until they press enter or next again
   const nextBtn = alertBox.querySelector("button[onclick='nextAlertMessage()']");
-  if (nextBtn) {
-    nextBtn.textContent = "Submit Guess";
-    nextBtn.onclick = function () {
-      const userGuess = inputField.value.trim();
-      console.log("User guessed:", userGuess); // Optional: process guess
+  nextBtn.textContent = "Submit Guess";
 
-      const message = currentMessages[currentIndex];
-      messageBox.textContent = message;
+  nextBtn.onclick = function () {
+    // Step 3: Lock in guess and reveal actual message
+    const message = currentMessages[currentIndex];
+    messageBox.textContent = message;
 
-      inputField.style.display = 'none';
-      nextBtn.textContent = "Next";
-      nextBtn.onclick = nextAlertMessage;
+    inputField.style.display = 'none';
+    nextBtn.textContent = "Next";
+    nextBtn.onclick = nextAlertMessage;
 
-      progressBar.style.width = '0%';
-      setTimeout(() => {
-        progressBar.style.transition = 'width 1.2s linear';
-        progressBar.style.width = '100%';
-      }, 100);
+    progressBar.style.width = '0%';
+    setTimeout(() => {
+      progressBar.style.transition = 'width 1.2s linear';
+      progressBar.style.width = '100%';
+    }, 100);
 
-      speak(message);
-      currentIndex++;
-    };
-  }
+    speak(message);
+    currentIndex++;
+  };
 }
 
-// --- Custom alert message sequences ---
+// --- Custom alert triggers (speech segments) ---
 
 function showAlertOpening() {
   showCustomAlert([
@@ -169,10 +156,10 @@ function showAlertBody1() {
 
 function showAlertBody2() {
   showCustomAlert([
-    "Growth you can measure",
-    "Toastmasters gives you a roadmap, for growth - the proof your leveling up. Now called Pathways",
-    "You can see your progress, and the skills you are developing",
-    "Evaluations that help sharpen your speech skills",
+            "Growth you can measure",
+            "Toastmasters gives you a roadmap, for growth - the proof your leveling up. Now called Pathways",
+            "You can see your progress, and the skills you are developing",
+            "Evaluations that help sharpen your speech skills",
   ]);
 }
 
@@ -182,6 +169,7 @@ function showAlertBody3() {
     "Think of Toastmasters like a gym. You wouldn't cancel your membership after one workout because you're not ripped yet, right?",
     "The real benefit comes from showing up week after week, when impromtu answers flow effortlessly, your evaluations help members to grow, and speeches become second nature.",
     "Where's the magic...it compounds!!!"
+
   ]);
 }
 
@@ -194,8 +182,8 @@ function showAlertClose() {
 }
 
 function exitAlert() {
-  synth.cancel();
-  document.getElementById('customAlert').classList.add('hidden');
+  synth.cancel(); // Stop current speech
+  document.getElementById('customAlert').classList.add('hidden'); // Hide dialog
   currentMessages = [];
   currentIndex = 0;
 }
