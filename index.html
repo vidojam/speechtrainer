@@ -8,6 +8,7 @@
 </head>
 <body>
   <div class="container">
+    <h1>Speech Trainer</h1>
     <h1>Pocket Speech 2025P1</h1>
 
     <!-- Voice Settings -->
@@ -46,6 +47,34 @@
     </div>
   </div>
 
+<!-- Custom Alert Modal (ONLY ONE) -->
+<div id="customAlert" class="custom-alert hidden">
+  <div class="custom-alert-content">
+
+    <label for="userPrediction">What do you think the next line is?</label>
+    <input
+      type="text"
+      id="userPrediction"
+      placeholder="Type your guess here..."
+      style="font-size: 1.5rem; padding: 0.5rem; width: 100%; box-sizing: border-box;"
+    />
+
+    <p id="customAlertMessage"></p>
+
+    <div class="custom-alert-controls">
+      <button onclick="replayAlert()">🔁 Replay</button>
+
+      <div class="vertical-controls">
+        <button onclick="toggleMute()" id="muteButton">🔇 Mute</button>
+        <button onclick="exitAlert()">❌ Exit</button>
+      </div>
+
+      <button onclick="nextAlertMessage()">Next</button>
+    </div>
+  </div>
+</div>
+
+
   <!-- Custom Alert Modal (ONLY ONE) -->
   <div id="customAlert" class="custom-alert hidden">
     <div class="custom-alert-content">
@@ -61,8 +90,9 @@
   <button onclick="nextAlertMessage()">Next</button>
   </div>
 
-  
+
 
   <script src="app.js"></script>
 </body>
 </html>
+

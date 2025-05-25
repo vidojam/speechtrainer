@@ -83,12 +83,12 @@ function showCustomAlert(messages) {
   nextAlertMessage(); // Start first message
 }
 
-// Display next message in the sequence
 function nextAlertMessage() {
   const messageBox = document.getElementById('customAlertMessage');
   const progressBar = document.getElementById('progressBar');
   const progress = document.getElementById('progressBarContainer');
   const alertBox = document.getElementById('customAlert');
+  const inputField = document.getElementById('userPrediction');
 
   if (currentIndex >= currentMessages.length) {
     alertBox.classList.add('hidden');
@@ -97,17 +97,34 @@ function nextAlertMessage() {
     return;
   }
 
-  const message = currentMessages[currentIndex];
-  messageBox.textContent = message;
+  // Step 1: Clear message and show input field
+  messageBox.textContent = '';
+  inputField.value = '';
+  inputField.style.display = 'block';
+  inputField.focus();
 
-  progressBar.style.width = '0%';
-  setTimeout(() => {
-    progressBar.style.transition = 'width 1.2s linear';
-    progressBar.style.width = '100%';
-  }, 100);
+  // Step 2: Replace Next button with Confirm Prediction until they press enter or next again
+  const nextBtn = alertBox.querySelector("button[onclick='nextAlertMessage()']");
+  nextBtn.textContent = "Submit Guess";
 
-  speak(message);
-  currentIndex++;
+  nextBtn.onclick = function () {
+    // Step 3: Lock in guess and reveal actual message
+    const message = currentMessages[currentIndex];
+    messageBox.textContent = message;
+
+    inputField.style.display = 'none';
+    nextBtn.textContent = "Next";
+    nextBtn.onclick = nextAlertMessage;
+
+    progressBar.style.width = '0%';
+    setTimeout(() => {
+      progressBar.style.transition = 'width 1.2s linear';
+      progressBar.style.width = '100%';
+    }, 100);
+
+    speak(message);
+    currentIndex++;
+  };
 }
 
 // --- Custom alert triggers (speech segments) ---
