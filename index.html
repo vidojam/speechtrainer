@@ -59,6 +59,18 @@
       style="font-size: 1.5rem; padding: 0.5rem; width: 100%; box-sizing: border-box;"
     />
 
+    <!-- Prediction Input Section -->
+<div id="predictionContainer" style="display: none; margin-top: 1rem;">
+  <input
+    type="text"
+    id="userPrediction"
+    placeholder="Type your guess here..."
+    style="font-size: 1.5rem; padding: 0.5rem; width: 100%; box-sizing: border-box;"
+  />
+  <button onclick="submitGuess()">Submit Guess</button>
+</div>
+
+
     <p id="customAlertMessage"></p>
 
     <div class="custom-alert-controls">
