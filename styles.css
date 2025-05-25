@@ -38,6 +38,11 @@ h1 {
   margin-top: 20px;
 }
 
+label[for="userPrediction"] {
+  font-size: 2em;
+  font-weight: bold;
+}
+
 /* .custom-alert {
   position: fixed;
   top: 30%;
