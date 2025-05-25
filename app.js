@@ -61,7 +61,7 @@ function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
   if (selectedVoice) utterance.voice = selectedVoice;
   utterance.rate = 1;
-  utterance.pitch = 1;
+  utterance.pitch = 2;
   utterance.volume = 1;
   synth.speak(utterance);
 }
@@ -129,7 +129,7 @@ function showAlertIntro() {
   ]);
 }
 
-function showAlertStage() {
+function showAlertBody1() {
   showCustomAlert([
     "The hidden gifts of Toastmasters... Progress I could see and growth you can measure.",
     "Evaluations that point out the good and the bad, for me to work on.",
@@ -137,21 +137,28 @@ function showAlertStage() {
   ]);
 }
 
-function showAlertEye() {
+function showAlertBody2() {
   showCustomAlert([
-    "The compound effect of Toastmasters... Think of Toastmasters as a gym.",
-    "You bonded with the audience...",
-    "You communicated passion and strengthened your message"
+            "Growth you can measure",
+            "Toastmasters gives you a roadmap, for growth - the proof your leveling up. Now called Pathways",
+            "You can see your progress, and the skills you are developing",
+            "Evaluations that help sharpen your speech skills",
   ]);
 }
 
-function showAlertGestures() {
-  showCustomAlert(["Pending"]);
+function showAlertBody3() {
+  showCustomAlert([
+    "Simply put, because it works...because of the compound effect.",
+    "Think of Toastmasters like a gym. You wouldn't cancel your membership after one workout because you're not ripped yet, right?",
+    "The real benefit comes from showing up week after week, when impromtu answers flow effortlessly, your evaluations help members to grow, and speeches become second nature.",
+    "Where's the magic...it compounds!!!"
+
+  ]);
 }
 
 function showAlertClose() {
   showCustomAlert([
-    "Because this isn't just a club.",
+    "This isn't just a club.",
     "It's the launchpad for the person you're becoming.",
     "Let's grow together."
   ]);
