@@ -4,6 +4,9 @@ let synth = window.speechSynthesis;
 
 let voices = [];
 let selectedVoice = null;
+let isReplaying = false;
+
+
 
 // Load available voices and populate the dropdown
 function loadVoices() {
@@ -36,10 +39,46 @@ let isMuted = false; // Track mute state
 
 function replayAlert() {
   if (currentMessages.length === 0 || currentIndex >= currentMessages.length) return;
-  const message = currentMessages[currentIndex];
-  document.getElementById('customAlertMessage').textContent = message;
-  speak(message);
+
+  isReplaying = true; // 🔁 replay mode active
+
+  const alertBox = document.getElementById('customAlert');
+  const messageBox = document.getElementById('customAlertMessage');
+  const inputField = document.getElementById('userPrediction');
+  const nextBtn = alertBox.querySelector("button[onclick='nextAlertMessage()']");
+  const message = currentMessages[currentIndex -1];
+
+  messageBox.textContent = '';
+  inputField.style.display = 'block';
+  inputField.value = '';
+  inputField.focus();
+
+  nextBtn.textContent = "Submit Guess";
+  nextBtn.onclick = function () {
+    messageBox.textContent = message;
+    inputField.style.display = 'none';
+    nextBtn.textContent = "Next";
+    nextBtn.onclick = nextAlertMessage;
+
+    const progressBar = document.getElementById('progressBar');
+    progressBar.style.transition = 'none';
+    progressBar.style.width = '0%';
+    setTimeout(() => {
+      progressBar.style.transition = 'width 1.2s linear';
+      progressBar.style.width = '100%';
+    }, 100);
+
+    speak(message);
+
+    isReplaying = false; // ✅ Turn off replay mode AFTER speaking
+  };
 }
+
+
+
+
+
+
 
 function toggleMute() {
   isMuted = !isMuted;
@@ -97,6 +136,12 @@ function nextAlertMessage() {
     return;
   }
 
+
+  inputField.style.display = 'block';
+  inputField.value = '';
+  setTimeout(() => inputField.focus(), 50); // small delay ensures it's focusable
+
+
   // Step 1: Clear message and show input field
   messageBox.textContent = '';
   inputField.value = '';
@@ -127,6 +172,24 @@ function nextAlertMessage() {
   };
 }
 
+
+// Enable Enter key to trigger "Submit Guess"
+document.addEventListener('DOMContentLoaded', () => {
+  const inputField = document.getElementById('userPrediction');
+  const alertBox = document.getElementById('customAlert');
+
+  inputField.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      const nextBtn = alertBox.querySelector("button[onclick='nextAlertMessage()']");
+      if (nextBtn && nextBtn.textContent === 'Submit Guess') {
+        e.preventDefault(); // prevent form submission or newline
+        nextBtn.click(); // simulate button click
+      }
+    }
+  });
+});
+
+
 // --- Custom alert triggers (speech segments) ---
 
 function showAlertOpening() {
@@ -148,7 +211,7 @@ function showAlertIntro() {
 
 function showAlertBody1() {
   showCustomAlert([
-    "The hidden gifts of Toastmasters... Progress I could see and growth you can measure.",
+    "The hidden gifts of Toastmasters.",
     "Evaluations that point out the good and the bad, for me to work on.",
     "Toastmasters provides a roadmap, Pathways, so you continue leveling up your skills"
   ]);
@@ -165,7 +228,7 @@ function showAlertBody2() {
 
 function showAlertBody3() {
   showCustomAlert([
-    "Simply put, because it works...because of the compound effect.",
+    "Toastmasters has a compound effect.",
     "Think of Toastmasters like a gym. You wouldn't cancel your membership after one workout because you're not ripped yet, right?",
     "The real benefit comes from showing up week after week, when impromtu answers flow effortlessly, your evaluations help members to grow, and speeches become second nature.",
     "Where's the magic...it compounds!!!"
